@@ -10,6 +10,7 @@ This PowerPoint add-in allows you to quickly convert Markdown-formatted text int
 - **Headings to Slides:**
   - `# Heading` creates a new main slide (title or content, context-aware).
   - `## Subheading` creates a subtitle and splits content into separate slides.
+  - `### Sub-subheading` creates a styled sub-heading within slides without splitting content.
 - **Lists:** Unordered (`- item`) and ordered (`1. item`) lists are supported, including indentation for sub-lists.
 - **Inline Formatting:**
   - `**bold**`

@@ -133,6 +133,12 @@ namespace MDparser
                                 {
                                     AddParagraphWithFormatting(bodyShape, olText, false, isOrdered: true, orderNum: orderNum, indent: olIndent, isUnordered: false);
                                 }
+                                else if (bodyLine.Trim().StartsWith("### "))
+                                {
+                                    // Handle ### headings as styled sub-headings
+                                    string subHeading = bodyLine.Trim().Substring(4).Trim();
+                                    AddParagraphWithFormatting(bodyShape, subHeading, false, isOrdered: false, orderNum: 0, indent: 0, isUnordered: false, isSubHeading: true);
+                                }
                                 else if (!string.IsNullOrWhiteSpace(bodyLine))
                                 {
                                     AddParagraphWithFormatting(bodyShape, bodyLine.Trim(), false, isOrdered: false, orderNum: 0, indent: 0, isUnordered: false);
@@ -186,6 +192,12 @@ namespace MDparser
                             {
                                 AddParagraphWithFormatting(bodyShape, olText, false, isOrdered: true, orderNum: orderNum, indent: olIndent, isUnordered: false);
                             }
+                            else if (bodyLine.Trim().StartsWith("### "))
+                            {
+                                // Handle ### headings as styled sub-headings
+                                string subHeading = bodyLine.Trim().Substring(4).Trim();
+                                AddParagraphWithFormatting(bodyShape, subHeading, false, isOrdered: false, orderNum: 0, indent: 0, isUnordered: false, isSubHeading: true);
+                            }
                             else if (!string.IsNullOrWhiteSpace(bodyLine))
                             {
                                 AddParagraphWithFormatting(bodyShape, bodyLine.Trim(), false, isOrdered: false, orderNum: 0, indent: 0, isUnordered: false);
@@ -202,7 +214,7 @@ namespace MDparser
             }
         }
 
-        private void AddParagraphWithFormatting(PowerPoint.Shape shape, string markdownText, bool isTitle, bool isOrdered, int orderNum, int indent, bool isUnordered = false)
+        private void AddParagraphWithFormatting(PowerPoint.Shape shape, string markdownText, bool isTitle, bool isOrdered, int orderNum, int indent, bool isUnordered = false, bool isSubHeading = false)
         {
             var tr2 = shape.TextFrame2.TextRange;
             string prefix = "";
@@ -231,6 +243,13 @@ namespace MDparser
             if (isTitle)
             {
                 para2.Font.Size = 32;
+                para2.Font.Bold = Office.MsoTriState.msoTrue;
+                para2.Font.UnderlineStyle = Office.MsoTextUnderlineType.msoNoUnderline;
+                pf2.Bullet.Visible = Office.MsoTriState.msoFalse;
+            }
+            else if (isSubHeading)
+            {
+                para2.Font.Size = 22;
                 para2.Font.Bold = Office.MsoTriState.msoTrue;
                 para2.Font.UnderlineStyle = Office.MsoTextUnderlineType.msoNoUnderline;
                 pf2.Bullet.Visible = Office.MsoTriState.msoFalse;
